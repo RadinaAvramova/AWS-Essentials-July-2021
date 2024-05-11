@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+    * {
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    box-sizing: border-box;
+    font: 18px/1.5 Verdana, sans-serif;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body, form, input, textarea, option, select, button, section, article {
+    font: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Georgia, serif;
+}
+
+h1 {
+    font-size: 1.6em;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+}
+
+h2 {
+    font-size: 1.4em;
+}
+
+h3 {
+    font-size: 0.75em;
+    padding: 5px;
+    text-align: center;
+    text-decoration: underline;
+}
+
+p {
+    font-size: 0.55em;
+    margin: 5px;
+    text-align: center;
+}
+
+p+p {
+    margin-top: 1rem;
+}
+
+section {
+    display: flex;
+    flex-flow: column;
+    flex-wrap: wrap;
+    max-width: 24%;
+    flex-basis: 30%;
+    flex-shrink: 0;
+    flex-grow: 1;
+    margin: 2px;
+}
+
+article {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    min-height: 10%;
+    background-color: aliceblue;
+    font-size: 1.2em;
+}
+
+form {
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    min-height: 10%;
+    background-color: aliceblue;
+    font-size: 0.75em;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 2px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+button {
+    padding: 3px;
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 0.75rem;
+}
+
+form button {
+    display: block;
+    margin-left: auto;
+    background-color: #8f7ee6;
+    color: white;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 2rem auto 0;
+    border-radius: 5px;
+    width: 90%;
+    background-color: #889fab;
+}
+
+.gray {
+    background-color: #3d474d;
+}
+
+.orange {
+    background-color: #ff9f1a;
+}
+
+.yellow {
+    background-color: #ffd500;
+}
+
+.green {
+    background-color: #8acc47;
+    color: white;
+}
+
+.red {
+    background-color: #d93651;
+    color: white;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+}
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>window.addEventListener('DOMContentLoaded', () => {
+            solve();
+        });</script>
+    <title>Document</title>
+</head>
+
+<body>
+    <main>
+        <div class="wrapper">
+            <section>
+                <div>
+                    <h1 class="gray">Add Task</h1>
+                </div>
+                <div>
+                    <form action="">
+                        <label for="task">Task</label><br>
+                        <input type="text" id="task" name="task" placeholder="JS Advanced Exam"><br>
+                        <label for="description">Description</label><br>
+                        <textarea id="description" placeholder="Lern DOM, Unit Testing and Classes"></textarea>
+                        <label for="date">Due Date</label><br>
+                        <input type="text" id="date" name="date" placeholder="2020.04.14"><br>
+                        <button id="add">Add</button>
+                    </form>
+                </div>
+            </section>
+
+            <section>
+                <div>
+                    <h1 class="orange">Open</h1>
+                </div>
+                <div>
+                    
+                </div>
+            </section>
+            <section>
+                <div>
+                    <h1 class="yellow">In Progress</h1>
+                </div>
+                <div id="in-progress">
+                    
+                </div>
+            </section>
+            <section>
+                <div>
+                    <h1 class="green">Complete</h1>
+                </div>
+                <div>
+                    
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+<script>
+    function solve() {
+	const elements = {
+		taskInput: document.getElementById('task'),
+		descriptionInput: document.getElementById('description'),
+		dateInput: document.getElementById('date'),
+		sections: document.getElementsByTagName('section'),
+	};
+
+	function createDomElement(tag, content, className) {
+		let element = document.createElement(tag);
+		if (content !== undefined) {
+			if (tag === 'input') {
+				element.value = content;
+			} else {
+				element.textContent = content;
+			}
+		}
+		if (className !== undefined) {
+			element.className = className;
+		}
+		return element;
+	}
+
+	function createTask(task, description, date) {
+		const article = createDomElement('article');
+		const title = createDomElement('h3', task);
+		const descP = createDomElement('p', description);
+		const dateP = createDomElement('p', date);
+		const buttons = createDomElement('div', undefined, 'flex');
+		const buttonGreen = createDomElement('button', 'Start', 'green');
+		const buttonRed = createDomElement('button', 'Delete', 'red');
+
+		article.appendChild(title);
+		article.appendChild(descP);
+		article.appendChild(dateP);
+
+		buttons.appendChild(buttonGreen);
+		buttons.appendChild(buttonRed);
+
+		article.appendChild(buttons);
+		return article;
+	}
+
+	function add(e) {
+		e.preventDefault();
+		const task = elements.taskInput.value;
+		const description = 'Description: '+ elements.descriptionInput.value;
+		const date = 'Due Date: ' + elements.dateInput.value;
+        if(!task||!description||!date){
+            return 0;
+        }
+		let article = createTask(task, description, date);
+		
+		elements.sections[1].children[1].appendChild(article);
+	}
+
+	function start(e) {
+        let article = e.target.parentNode.parentNode;
+        let buttons = e.target.parentNode;
+        buttons.children[0].remove();
+        buttons.appendChild(createDomElement('button','Finish','orange'));
+        elements.sections[2].children[1].appendChild(article);
+	}
+
+	function deleteArt(e) {
+		e.target.parentNode.parentNode.remove();
+	}
+
+	function finish(e) {
+		let article = e.target.parentNode.parentNode;
+		let buttons = e.target.parentNode;
+		buttons.remove();
+		elements.sections[3].children[1].appendChild(article);
+	}
+
+	document.getElementsByClassName('wrapper')[0].addEventListener('click', e => {
+		const map = {
+			Add: add,
+			Start: start,
+			Delete: deleteArt,
+			Finish: finish,
+		};
+
+		if (map.hasOwnProperty(e.target.textContent)) {
+			map[e.target.textContent](e);
+		}
+	});
+}
+
+</script>
+</html>
